@@ -1,9 +1,9 @@
 import requests
 from lxml import html
-from urllib.parse import urljoin, urlparse
-import json
+from urllib.parse import urljoin,urlparse
+from bs4 import BeautifulSoup
 
-def crawl(url, visited=None, results=None, depth=0, max_depth=2):
+def crawl(url,visited=None,results=None,depth=0,max_depth=2):
     if visited is None:
         visited = set()
     if results is None:
@@ -16,14 +16,19 @@ def crawl(url, visited=None, results=None, depth=0, max_depth=2):
         print(f"Crawling: {url}")
         visited.add(url)
 
-        response = requests.get(url, timeout=5)
-        tree = html.fromstring(response.content)
+        res = requests.get(url,timeout=5)
+        tree = html.fromstring(res.content)
 
-        title = tree.findtext('.//title') or "Sin título"
+        title = tree.findtext(".//title") or "Untitled"
+
+        soup = BeautifulSoup(res.text,"html.parser")
+
+        body = soup.find("body")
 
         #guardar en memoria
         results[url] = {
-            "title": title
+            "title": title,
+            "content": body.get_text()
         }
 
         #extraer enlaces
