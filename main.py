@@ -1,10 +1,13 @@
-from src.crawl import crawl
-import json
+from src.crawl import fetch_crawl
 import sys
 
-#ejecutar el crawler
-results = crawl(sys.argv[1])
+visited = set()
+results = {}
 
-#guardar en un json bonito :)
-with open("urls.json","w",encoding="utf-8") as f:
+#ejecutar crawler
+fetch_crawl(sys.argv[1],visited,results,0,2,50)
+
+#guardar en json
+import json
+with open("results.json","w",encoding="utf-8") as f:
     json.dump(results,f,indent=4,ensure_ascii=False)
