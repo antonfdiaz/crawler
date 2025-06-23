@@ -2,7 +2,7 @@ from src.crawl import fetch_crawl
 import sys
 
 visited = set()
-results = {}
+results = []
 
 #ejecutar crawler
 fetch_crawl(sys.argv[1],visited,results,0,2,50)

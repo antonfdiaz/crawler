@@ -19,9 +19,9 @@ def fetch_crawl(url,visited,results,depth,max_depth,word_limit):
 
     try:
         print(f"Crawling: {url}")
-        res = requests.get(url, timeout=5)
+        res = requests.get(url,timeout=5)
         tree = html.fromstring(res.content)
-        soup = BeautifulSoup(res.text, "html.parser")
+        soup = BeautifulSoup(res.text,"html.parser")
 
         title = tree.findtext(".//title") or "Untitled"
         body = soup.find("body")
@@ -35,10 +35,11 @@ def fetch_crawl(url,visited,results,depth,max_depth,word_limit):
             content = ""
 
         with lock:
-            results[url] = {
+            results.append({
+                "url": url,
                 "title": title,
                 "content": content
-            }
+            })
 
         links = tree.xpath("//a/@href")
         new_urls = []
